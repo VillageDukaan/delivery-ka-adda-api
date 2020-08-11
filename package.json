@@ -4,7 +4,8 @@
   "description": "Building an api for VillageDukaan using node so that all unemployed who are looking for Job can register and use the services to deliver products for users",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production & nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "ndb server.js"
