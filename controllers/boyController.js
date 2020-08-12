@@ -1,9 +1,15 @@
 const Boy = require('./../models/boyModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
-const AppError = require('../utils/appError')
+const AppError = require('../utils/appError');
 
-exports.getAllBoys = factory.getAll(Boy)
+exports.setUserIds = (req, res, next) => {
+  // Allow nested routes
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
+
+exports.getAllBoys = factory.getAll(Boy);
 exports.getBoy = factory.getOne(Boy, { path: 'reviews' });
 exports.createBoy = factory.createOne(Boy);
 exports.updateBoy = factory.updateOne(Boy);
@@ -86,19 +92,24 @@ exports.getBoysWithin = catchAsync(async (req, res, next) => {
 
   const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
 
-  if(!lat || !lng) {
+  if (!lat || !lng) {
     next(
-      new AppError('Please provide latitude and longitude in the format lat, lng.', 400)
-    )
+      new AppError(
+        'Please provide latitude and longitude in the format lat, lng.',
+        400
+      )
+    );
   }
 
-  const boys = await  Boy.find({ selectedLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } } });
+  const boys = await Boy.find({
+    selectedLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
 
   res.status(200).json({
     status: 'success',
     results: boys.length,
     data: {
-      data: boys
-    }
-  })
+      data: boys,
+    },
+  });
 });
