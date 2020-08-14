@@ -55,10 +55,6 @@ const boySchema = new mongoose.Schema(
       default: Date.now(),
       select: false,
     },
-    isApproved: {
-      type: Boolean,
-      default: false,
-    },
     selectedLocation: {
       type: {
         type: String,
