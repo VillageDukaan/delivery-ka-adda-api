@@ -9,6 +9,8 @@ const {
   getBoyStats,
   getMonthlyPlan,
   getBoysWithin,
+  uploadBoyPhoto,
+  resizeBoyPhoto,
 } = require('./../controllers/boyController');
 
 const { protect, restrictTo } = require('./../controllers/authController');
@@ -24,7 +26,10 @@ router
   .route('/boys-within/:distance/center/:latlng/unit/:unit')
   .get(getBoysWithin);
 
-router.route('/').get(getAllBoys).post(protect, createBoy);
+router
+  .route('/')
+  .get(getAllBoys)
+  .post(uploadBoyPhoto, resizeBoyPhoto, protect, createBoy);
 
 router
   .route('/:id')
