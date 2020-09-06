@@ -5,17 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/boys');
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `boy-${req.user.id}-${Date.now()}.${ext}`);
-  },
-});
-
-// const multerStorage = multer.memoryStorage();
+const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
@@ -33,8 +23,10 @@ const upload = multer({
 exports.uploadBoyPhoto = upload.fields([{ name: 'imageCover', maxCount: 1 }]);
 
 exports.resizeBoyPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
-  req.body.imageCover = `boy-${req.params.id}-${Date.now()}.jpeg`;
+  if (!req.files.imageCover) return next();
+
+  console.log(req.files.imageCover[0]);
+  req.body.imageCover = `boy-${req.params.id}-${Date.now()}-cover.jpeg`;
   await sharp(req.files.imageCover[0].buffer)
     .resize(500, 500)
     .toFormat('jpeg')

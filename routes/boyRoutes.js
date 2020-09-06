@@ -35,7 +35,7 @@ router
 router
   .route('/:id')
   .get(getBoy)
-  .patch(protect, restrictTo('admin'), updateBoy)
+  .patch(protect, uploadBoyPhoto, resizeBoyPhoto, updateBoy)
   .delete(protect, restrictTo('admin'), deleteBoy);
 
 module.exports = router;
