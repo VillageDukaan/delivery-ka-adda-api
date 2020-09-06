@@ -64,10 +64,11 @@ exports.getOne = (Model, popOptions) =>
     });
   });
 
-  exports.getAll = Model => catchAsync(async (req, res, next) => {
+exports.getAll = (Model) =>
+  catchAsync(async (req, res, next) => {
     // To allow for nested GET reviews on boy
-    let filter = {}
-    if (req.params.boyId) filter = { boy: req.params.boyId }
+    let filter = {};
+    if (req.params.boyId) filter = { boy: req.params.boyId };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
@@ -75,7 +76,7 @@ exports.getOne = (Model, popOptions) =>
       .limitFields()
       .paginate();
     const doc = await features.query;
-  
+
     res.status(200).json({
       status: 'success',
       results: doc.length,

@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const reviewRouter = require('./../routes/reviewRoutes');
 const {
   getAllBoys,
@@ -29,7 +30,7 @@ router
 router
   .route('/')
   .get(getAllBoys)
-  .post(uploadBoyPhoto, resizeBoyPhoto, protect, createBoy);
+  .post(protect, uploadBoyPhoto, resizeBoyPhoto, createBoy);
 
 router
   .route('/:id')
