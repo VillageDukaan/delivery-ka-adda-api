@@ -26,7 +26,7 @@ exports.resizeBoyPhoto = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover) return next();
 
   console.log(req.files.imageCover[0]);
-  req.body.imageCover = `boy-${req.params.id}-${Date.now()}-cover.jpeg`;
+  req.body.imageCover = `boy-${req.user.id}-${Date.now()}-cover.jpeg`;
   await sharp(req.files.imageCover[0].buffer)
     .resize(500, 500)
     .toFormat('jpeg')
